@@ -13,11 +13,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the devkitPro pacman installer script from your repo
-COPY install-devkitpro-pacman /tmp/install-devkitpro-pacman
+COPY devkit-container/install-devkitpro-pacman /tmp/install-devkitpro-pacman
 
 # Make it executable and run it
 RUN chmod +x /tmp/install-devkitpro-pacman && \
-    /tmp/install-devkitpro-pacman
+    yes | /tmp/install-devkitpro-pacman
+
+# Fix missing /etc/mtab for pacman inside Docker
+RUN ln -sf /proc/self/mounts /etc/mtab
 
 # Update devkitPro pacman and install 3DS toolchain
 RUN dkp-pacman -Syu --noconfirm && \
