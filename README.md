@@ -1,14 +1,17 @@
 # Tiny3D
-a C++ game engine for the 3Ds
+a lightweight C++ game engine for the 3Ds platform
 
 # dependencies
 
-Install devkitpro
+## devkitpro container
 
-## Ubuntu
+The project has a dockerfile to setup and create a docker container with devkitpro
 
 ```bash
-  wget https://apt.devkitpro.org/install-devkitpro-pacman
-   chmod +x ./install-devkitpro-pacman
-   sudo ./install-devkitpro-pacman
+    docker build -t tiny3d-dev -f devkit-container/Dockerfile .
+    docker run --rm -it -v $(pwd):/workspace tiny3d-dev
 ```
+
+## Alternative
+
+Install devkitpro following the guide https://devkitpro.org/wiki/devkitPro_pacman
