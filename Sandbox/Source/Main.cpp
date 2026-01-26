@@ -1,28 +1,35 @@
-#include <3ds.h>
+#include <3ds.h>   // Required for 3DS entry point and hardware
 #include <stdio.h>
-#include <tiny.h> // The master header!
+#include <tiny.h>
 
 int main(int argc, char* argv[]) {
-    //gfxInitDefault();
-    //consoleInit(GFX_TOP, NULL);
+    // 1. Initialize the 3DS graphics and console
+    gfxInitDefault();
+    consoleInit(GFX_TOP, NULL);
 
-    // Testing our master header
+    // 2. Use your engine code
     printf("Engine Version: %s\n", Tiny3d::GetVersion());
 
-    // Testing our Math component through the master header
-    Tiny3d::Vector3 vec(1.0f, 2.0f, 3.0f);
-    printf("Vector initialized at: %.1f, %.1f\n", vec.x, vec.y);
+    // Use the correct namespace capitalization
+    tiny3d::Vec2 vec(1.0f, 2.0f);
+    printf("Vector: %.1f, %.1f\n", vec.x, vec.y);
 
     printf("\nPress START to exit.");
 
-    /*while (aptMainLoop()) {
+    // 3. Main loop: The 3DS needs this to stay alive
+    while (aptMainLoop()) {
         hidScanInput();
-        if (hidKeysDown() & KEY_START) break;
+        u32 kDown = hidKeysDown();
+
+        if (kDown & KEY_START) break; // Exit to Homebrew Menu
+
+        // Flush and swap framebuffers
         gfxFlushBuffers();
         gfxSwapBuffers();
         gspWaitForVBlank();
     }
 
-    gfxExit();*/
+    // 4. Cleanup and exit
+    gfxExit();
     return 0;
 }
