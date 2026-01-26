@@ -1,0 +1,19 @@
+DEVKITPRO ?= /opt/devkitpro
+include $(DEVKITPRO)/3ds_rules
+
+TARGET      := tiny3d
+BUILD       := build
+SOURCES     := Source
+INCLUDES    := Source     # 👈 Headers live here too
+
+CFLAGS      := -g -O2 -Wall -DARM11 -D_3DS
+CXXFLAGS    := $(CFLAGS) -fno-rtti -fno-exceptions
+ARCH        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
+
+LIBRARY     := $(BUILD)/lib$(TARGET).a
+
+.PHONY: all clean
+all: $(LIBRARY)
+
+clean:
+	rm -rf $(BUILD)
