@@ -1,4 +1,6 @@
 DEVKITPRO ?= /opt/devkitpro
+# Match devkitPro examples: set ARCH (including float ABI / FPU) before including rules
+ARCH := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mfpu=vfp -mtp=soft
 include $(DEVKITPRO)/devkitARM/3ds_rules
 
 TARGET      := Sandbox
@@ -16,7 +18,7 @@ INCLUDES    := -I$(SOURCES) -I$(ENGINE_PATH) -I$(CTR_INC)
 LIBDIRS     := -L$(ENGINE_PATH) -L$(CTR_LIB)
 
 # Use $(ARCH) from 3ds_rules
-CFLAGS      := $(ARCH) -O2 -mword-relocations -Wall $(INCLUDES) -DARM11 -D_3DS
+CFLAGS      := $(ARCH) -O2 -mword-relocations -Wall $(INCLUDES) -D__3DS__
 CXXFLAGS    := $(CFLAGS) -fno-rtti -fno-exceptions
 
 # Order is vital: Engine -> Hardware Lib -> Math Lib
@@ -36,7 +38,7 @@ $(TARGET).3dsx: $(TARGET).elf
 	@3dsxtool $< $@
 
 $(TARGET).elf: $(OBJS)
-	$(CXX) $(ARCH) $(LIBDIRS) $^ $(LIBS) -o $@
+	$(CXX) -specs=3dsx.specs $(ARCH) $(LIBDIRS) $^ $(LIBS) -o $@
 
 $(BUILD)/%.o: $(SOURCES)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@

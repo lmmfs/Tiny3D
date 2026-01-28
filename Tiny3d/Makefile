@@ -1,4 +1,6 @@
 DEVKITPRO ?= /opt/devkitpro
+# Match devkitPro examples: set ARCH (including float ABI / FPU) before including rules
+ARCH := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mfpu=vfp -mtp=soft
 include $(DEVKITPRO)/devkitARM/3ds_rules
 
 TARGET      := tiny3d
@@ -13,7 +15,8 @@ LIBCTR      := $(DEVKITPRO)/libctr
 INCLUDES    := -I. -I$(SOURCE_DIR) -I$(LIBCTR)/include
 
 # Use $(ARCH) provided by 3ds_rules
-CFLAGS      := $(ARCH) -g -O2 -Wall $(INCLUDES) -DARM11 -D_3DS
+# Use $(ARCH) provided by 3ds_rules
+CFLAGS      := $(ARCH) -g -O2 -Wall $(INCLUDES) -D__3DS__
 CXXFLAGS    := $(CFLAGS) -fno-rtti -fno-exceptions
 
 LIBRARY     := lib$(TARGET).a
