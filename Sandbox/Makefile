@@ -1,6 +1,8 @@
 DEVKITPRO ?= /opt/devkitpro
-# Match devkitPro examples: set ARCH (including float ABI / FPU) before including rules
-ARCH := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mfpu=vfp -mtp=soft
+
+# Set ARCH before including 3ds_rules (required)
+ARCH := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
+
 include $(DEVKITPRO)/devkitARM/3ds_rules
 
 TARGET      := Sandbox
@@ -8,14 +10,14 @@ BUILD       := build
 SOURCES     := Source
 ENGINE_PATH := ../Tiny3d
 
-# Match the 3DS architecture and ABI exactly (same as library)
-ARCH        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
+# Compiler flags
 CFLAGS      := -g -Wall -O2 -mword-relocations $(ARCH) -ffunction-sections
+CXXFLAGS    := $(CFLAGS) -D__3DS__ -fno-rtti -fno-exceptions -std=gnu++14
 
+# Include and library paths
 INCLUDES    := -I$(SOURCES) -I$(ENGINE_PATH) -I$(DEVKITPRO)/libctru/include
 LIBDIRS     := -L$(ENGINE_PATH) -L$(DEVKITPRO)/libctru/lib
-
-CXXFLAGS    := $(CFLAGS) $(INCLUDES) -D__3DS__ -fno-rtti -fno-exceptions -std=gnu++11
+CXXFLAGS    += $(INCLUDES)
 
 # Linker specs for 3DS (includes crt0.o and startup code)
 LDFLAGS     := -specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
