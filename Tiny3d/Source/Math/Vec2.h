@@ -1,6 +1,6 @@
 #pragma once
 
-namespace tiny3d {
+namespace Tiny3d {
     struct Vec2 {
         float x, y;
 
