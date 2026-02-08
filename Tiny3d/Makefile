@@ -7,6 +7,13 @@ TARGET      := tiny3d
 BUILD       := build
 SOURCE_DIR  := Source
 
+# Match the 3DS architecture and ABI exactly
+ARCH        := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
+CFLAGS      := -g -Wall -O2 -mword-relocations $(ARCH) -ffunction-sections
+
+INCLUDES    := -I. -I$(SOURCE_DIR) -I$(DEVKITPRO)/libctru/include
+CXXFLAGS    := $(CFLAGS) $(INCLUDES) -D__3DS__ -fno-rtti -fno-exceptions -std=gnu++11
+
 SOURCES     := $(shell find $(SOURCE_DIR) -name '*.cpp')
 OBJS        := $(patsubst $(SOURCE_DIR)/%.cpp, $(BUILD)/%.o, $(SOURCES))
 
@@ -26,13 +33,10 @@ LIBRARY     := lib$(TARGET).a
 all: $(LIBRARY)
 
 $(LIBRARY): $(OBJS)
-	@mkdir -p $(dir $@)
-	@echo Linking Static Library...
 	$(AR) rcs $@ $(OBJS)
 
 $(BUILD)/%.o: $(SOURCE_DIR)/%.cpp
 	@mkdir -p $(dir $@)
-	@echo Compiling $<...
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
