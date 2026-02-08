@@ -28,6 +28,8 @@
 			m_LayerStack.push_back(std::make_unique<TLayer>());
 		}
 
+        float GetTime():
+
         private:
         ApplicationSpecification m_Specification;
 		bool m_Running = false;

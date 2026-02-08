@@ -15,9 +15,15 @@ namespace Tiny3d {
 
     void Application::Run() {
         m_Running = true;
+        float lastTime = GetTime();
         while (m_Running && aptMainLoop()) {
+
+            float currentTime = GetTime();
+            float timestep = currentTime - lastTime;
+            lastTime = currentTime;
+
             for (const std::unique_ptr<Layer>& layer : m_LayerStack) {
-                layer->OnUpdate(0.f);  // TODO: proper timestep
+                layer->OnUpdate(timestep);
             }
 
             for (const std::unique_ptr<Layer>& layer : m_LayerStack) {
@@ -37,6 +43,11 @@ namespace Tiny3d {
 
     void Application::OnEvent(Event& event) {
         // Handle events (e.g., input, window events, etc.)
+    }
+
+    float Application::GetTime() {
+        // TODO: Implement a proper timer
+        return 0.0f;
     }
 
 }
